@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attorney CRM</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2>Attorney Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="hidden">
+        <header>
+            <h1>Attorney CRM</h1>
+            <div class="user-info">
+                <span id="userWelcome"></span>
+                <button id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <nav class="controls">
+            <div class="filter-controls">
+                <select id="eventFilter">
+                    <option value="">All Contacts</option>
+                </select>
+                <button id="refreshBtn">Refresh</button>
+                <button id="addContactBtn">Add Contact</button>
+                <button id="debugBtn" type="button">Debug API</button>
+                <button id="debugFieldsBtn" type="button">Debug Fields</button>
+                <button id="debugEventsBtn" type="button">Debug Events</button>
+            </div>
+            <div class="view-controls">
+                <label>
+                    <input type="checkbox" id="showAllAttorneys"> Show All Attorneys' Contacts
+                </label>
+                <label>
+                    <input type="checkbox" id="prioritizeRSVPs"> Prioritize RSVPs (Yes → No → Pending)
+                </label>
+            </div>
+        </nav>
+
+        <main>
+            <div class="table-container">
+                <table id="contactsTable">
+                    <thead>
+                        <tr>
+                            <th data-sortable="firstName">
+                                First Name
+                                <span class="sort-indicator"></span>
+                            </th>
+                            <th data-sortable="lastName">
+                                Last Name
+                                <span class="sort-indicator"></span>
+                            </th>
+                            <th data-sortable="companyName">
+                                Company
+                                <span class="sort-indicator"></span>
+                            </th>
+                            <th data-sortable="email">
+                                Email
+                                <span class="sort-indicator"></span>
+                            </th>
+                            <th>Associated Events</th>
+                            <th id="rsvpHeader" class="hidden" data-sortable="rsvpStatus">
+                                RSVP Status
+                                <span class="sort-indicator"></span>
+                            </th>
+                            <th id="attendanceHeader" class="hidden" data-sortable="attended">
+                                Attended
+                                <span class="sort-indicator"></span>
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactsTableBody">
+                        <!-- Contacts will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <!-- Add Contact to Event Modal -->
+        <div id="addContactModal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Add Contact to Event</h2>
+                <form id="addContactForm">
+                    <div class="form-group">
+                        <label for="eventSelect">Select Event:</label>
+                        <select id="eventSelect" required>
+                            <option value="">Choose an event...</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit">Add to Event</button>
+                        <button type="button" id="cancelAdd">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add New Contact Modal -->
+        <div id="addContactFormModal" class="modal hidden">
+            <div class="modal-content large-modal">
+                <span class="close">&times;</span>
+                <h2>Add New Contact</h2>
+                <div class="add-contact-container">
+                    <div class="form-section">
+                        <h3>Contact Information</h3>
+                        <form id="newContactForm">
+                            <div class="form-group">
+                                <label for="firstName">First Name:</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name:</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="companyName">Company Name:</label>
+                                <input type="text" id="companyName" name="companyName">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="events-section">
+                        <h3>Add to Events (Optional)</h3>
+                        <div id="eventCheckboxes" class="checkbox-group">
+                            <!-- Event checkboxes will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="drag-drop-section">
+                        <div class="drag-drop-area">
+                            <p><strong>Alternative:</strong> Drag and drop an Outlook contact card here to auto-fill the form</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" onclick="contactManager.submitNewContact()">Add Contact</button>
+                    <button type="button" onclick="contactManager.hideAddContactForm()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Drop Zone for Outlook Contacts -->
+    <div id="dropZone" class="drop-zone hidden">
+        <p>Drop Outlook Contact Card Here</p>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/contacts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
